@@ -10,8 +10,9 @@ type Config struct {
 	Domainscan DomainScan `yaml:"domainscan"`
 }
 type DomainScan struct {
-	//ProviderFile string "C:\\Users\\czhac\\.config\\subfinder\\provider-config.yaml"
-	ProviderFile string `yaml:"provider-file"`
+	ProviderFile  string `yaml:"provider-file"`
+	SubdomainFile string `yaml:"subdomain-file"`
+	SubdomainData []string
 }
 
 const configFile = "config.yaml"
