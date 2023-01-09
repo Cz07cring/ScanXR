@@ -1,4 +1,4 @@
-module ScanXR
+module github.com/Cz07cring/ScanXR
 
 go 1.18
 
