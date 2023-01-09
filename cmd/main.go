@@ -1,16 +1,29 @@
 package main
 
 import (
-	"pkg/domainscan/subfinder"
+	"ScanX/config"
+	"ScanX/pkg/domainscan/subfinder"
+	"github.com/projectdiscovery/gologger"
 )
 
-func workflow(domain string) {
-	EnumerateSubdomains(domain)
+var (
+	targets []string
+)
+
+func workflow(domain []string) {
+	options := Subfinder.Options{ProviderConfig: config.Worker.Domainscan.ProviderFile}
+	domainscanRunner, err := Subfinder.NewRunner(&options)
+	if err != nil {
+		gologger.Error().Msgf("domainscan.NewRunner() err, %v", err)
+		return
+	}
+	domainscanRunner.Run(domain)
+
 }
 
 func main() {
 	var domain = []string{
-		"baidu.com",
+		"2100w.cn",
 	}
 	workflow(domain)
 }
