@@ -2,7 +2,7 @@ package main
 
 import (
 	"ScanX/config"
-	"ScanX/pkg/domainscan/subfinder"
+	"ScanX/pkg/domainscan"
 	"github.com/projectdiscovery/gologger"
 )
 
@@ -11,8 +11,8 @@ var (
 )
 
 func workflow(domain []string) {
-	options := Subfinder.Options{ProviderConfig: config.Worker.Domainscan.ProviderFile}
-	domainscanRunner, err := Subfinder.NewRunner(&options)
+	options := domainscan.Options{ProviderConfig: config.Worker.Domainscan.ProviderFile}
+	domainscanRunner, err := domainscan.NewRunner(&options)
 	if err != nil {
 		gologger.Error().Msgf("domainscan.NewRunner() err, %v", err)
 		return

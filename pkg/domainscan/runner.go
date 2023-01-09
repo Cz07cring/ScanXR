@@ -1,6 +1,8 @@
-package Subfinder
+package domainscan
 
 import (
+	"ScanX/pkg/domainscan/ksudomain"
+	"ScanX/pkg/domainscan/subfinder"
 	//"ScanX/pkg/domainscan/subfinder"
 	"fmt"
 	"github.com/projectdiscovery/gologger"
@@ -33,12 +35,15 @@ func (r *Runner) RunEnumeration(domain string) (results []*Result) {
 	gologger.Info().Msgf("开始子域名扫描: %v", domain)
 	// 被动收集,subfinder
 	gologger.Info().Msgf("被动收集...")
-	domains, err := EnumerateSubdomains([]string{domain}, r.options.ProviderConfig)
+	domains, err := Subfinder.EnumerateSubdomains([]string{domain}, r.options.ProviderConfig)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 	gologger.Info().Msgf("subfinder: %v", domains)
 	//	domains = append(domains, domain)
+	gologger.Info().Msgf("开始DNS解析: %v", len(domains))
+	result, err := ksubdomain.Run(domains, "500000k")
+	gologger.Info().Msgf("ksubdomain结果: %v", len(result))
 	return
 }
