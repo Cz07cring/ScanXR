@@ -1,9 +1,9 @@
 package domainscan
 
 import (
-	"ScanX/internal/utils"
-	ksubdomain "ScanX/pkg/domainscan/ksudomain"
-	"ScanX/pkg/domainscan/subfinder"
+	"ScanXR/internal/utils"
+	ksubdomain "ScanXR/pkg/domainscan/ksudomain"
+	"ScanXR/pkg/domainscan/subfinder"
 	//"ScanX/pkg/domainscan/subfinder"
 	"fmt"
 	"github.com/projectdiscovery/gologger"

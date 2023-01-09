@@ -1,8 +1,8 @@
 package main
 
 import (
-	"ScanX/config"
-	"ScanX/pkg/domainscan"
+	"ScanXR/config"
+	"ScanXR/pkg/domainscan"
 	"fmt"
 	"github.com/projectdiscovery/gologger"
 )
