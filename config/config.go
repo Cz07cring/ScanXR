@@ -13,9 +13,11 @@ type Config struct {
 
 //加载config配置对应数据
 type DomainScan struct {
-	ProviderFile  string `yaml:"provider-file"`
-	SubdomainFile string `yaml:"subdomain-file"`
-	SubdomainData []string
+	ProviderFile       string `yaml:"provider-file"`
+	SubdomainFile      string `yaml:"subdomain-file"`
+	SubdomainFileSmall string `yaml:"subdomainsmall-file"` //扩大域名收集攻击面加载域名小字典防止报错
+	SubdomainData      []string
+	SubdomainDataSmall []string
 }
 
 //config文件配置

@@ -2,24 +2,24 @@ package domainscan
 
 import (
 	"github.com/Cz07cring/ScanXR/internal/utils"
-	//"github.com/Cz07cring/ScanXR/pkg/gologger"
+	"github.com/Cz07cring/ScanXR/pkg/domainscan/dnsgen"
 	ksubdomain "github.com/Cz07cring/ScanXR/pkg/domainscan/ksudomain"
 	"github.com/Cz07cring/ScanXR/pkg/domainscan/subfinder"
 	"net"
 
-	//"ScanX/pkg/domainscan/subfinder"
 	"fmt"
 	"github.com/projectdiscovery/gologger"
 )
 
 //Options 配置文件
 type Options struct {
-	Layer          int
-	ProviderConfig string
-	SubdomainData  []string
-	CdnIpData      []string
-	CdnCnameData   []string
-	SubnextData    []string
+	Layer              int
+	ProviderConfig     string
+	SubdomainData      []string
+	SubdomainDataSmall []string
+	CdnIpData          []string
+	CdnCnameData       []string
+	SubnextData        []string
 }
 
 //返回结果
@@ -41,6 +41,8 @@ func NewRunner(options *Options) (*Runner, error) {
 		options: options,
 	}, nil
 }
+
+//扫描域列表和域传送并且返回result结果
 func (r *Runner) Run(domains []string) (results []*Result) {
 	for _, domain := range domains {
 		gologger.Info().Msgf("开始域传送扫描 %s", domain)
@@ -101,12 +103,26 @@ func (r *Runner) RunEnumeration(domain string) (results []*Result) {
 	gologger.Info().Msgf("subfinder: %v", domains)
 	domains = append(domains, domain)
 	var isWildcard bool
-	if CheckWildcard(domain) {
+	//泛解析check
+	//if CheckWildcard(domain) {
+	//	isWildcard = true
+	//	gologger.Info().Msgf("存在泛解析: %v", domain)
+	if false {
 		isWildcard = true
 		gologger.Info().Msgf("存在泛解析: %v", domain)
 	} else {
+		// 生产新域名
+		domainslist := dnsgen.Dnsgen(domain, r.options.SubdomainDataSmall)
 		for _, sub := range r.options.SubdomainData {
+
 			domains = append(domains, sub+"."+domain)
+
+			for _, s := range domainslist {
+				domains = append(domains, s+"."+domain)
+			}
+			//fmt.Println("xxxxxxxxxxxxxxxxxxxxx")
+			//fmt.Println("xxxxxxxxxxxxxxxxxxxxx")
+			//fmt.Println(domains)
 
 		}
 		domains = utils.RemoveDuplicate(domains)
@@ -115,6 +131,10 @@ func (r *Runner) RunEnumeration(domain string) (results []*Result) {
 			for _, sub2 := range r.options.SubnextData {
 				for _, d := range domainss {
 					domains = append(domains, sub2+"."+d)
+					domainslist := dnsgen.Dnsgen(domain, r.options.SubdomainData)
+					for _, s := range domainslist {
+						domains = append(domains, s+"."+domain)
+					}
 				}
 			}
 		}
