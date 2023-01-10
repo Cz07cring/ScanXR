@@ -3,8 +3,13 @@ package domainscan
 import (
 	"errors"
 	"github.com/miekg/dns"
+	"golang.org/x/net/publicsuffix"
 	"strings"
 )
+
+func GetTopDomain(domain string) (string, error) {
+	return publicsuffix.EffectiveTLDPlusOne(domain)
+}
 
 // AXFR attempts a zone transfer for the domain.
 // return dns server| result | error

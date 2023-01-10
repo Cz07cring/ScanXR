@@ -1,7 +1,7 @@
 package core
 
-import "fmt"
 import (
+	"fmt"
 	"github.com/Cz07cring/ScanXR/config"
 	"github.com/Cz07cring/ScanXR/pkg/domainscan"
 	"github.com/projectdiscovery/gologger"

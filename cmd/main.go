@@ -1,13 +1,6 @@
 package main
 
-import (
-	//
-	//"ScanXR/pkg/domainscan"
-	//"fmt"
-	//"github.com/Cz07cring/ScanXR/config"
-	"github.com/Cz07cring/ScanXR/core"
-	//"github.com/projectdiscovery/gologger"
-)
+import "github.com/Cz07cring/ScanXR/core"
 
 var (
 	targets []string
