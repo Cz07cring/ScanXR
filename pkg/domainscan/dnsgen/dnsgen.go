@@ -11,10 +11,7 @@ import (
 func Dnsgen(domain string, SubdomainData []string) []string {
 	gologger.Info().Msgf("开始根据域名结合字典生产新数据扩大攻击面...")
 	resultLists := []string{}
-	//2100w1231.cn
 	domainIndex := strings.Index(domain, ".")
-	//domainNew := strings.Index(domain[domainIndex:], domain)
-	//log.Println(domainIndex, domain[:domainIndex])
 	ruleList := []string{"{sub}{domain}", "{domain}{sub}",
 		"{sub}{rule}{domain}",
 		"{domain}{rule}{sub}",
@@ -27,7 +24,6 @@ func Dnsgen(domain string, SubdomainData []string) []string {
 			for list := range ruleData {
 
 				resultList := strings.Replace(ruleList[s], "{sub}", SubdomainData[datum], -1)
-
 				resultList = strings.Replace(resultList, "{domain}", domain[:domainIndex], -1)
 				resultList = strings.Replace(resultList, "{rule}", ruleData[list], -1)
 				resultLists = append(resultLists, resultList)
