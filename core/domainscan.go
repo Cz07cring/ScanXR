@@ -17,9 +17,12 @@ func Domainscan_start(domain []string) error {
 	if config.Worker.Domainscan.SubdomainDataSmall, err = utils.ReadLines(config.Worker.Domainscan.SubdomainFileSmall); err != nil {
 		return err
 	}
+	if config.Worker.Domainscan.SubnextData, err = utils.ReadLines(config.Worker.Domainscan.SubnextFile); err != nil {
+		return err
+	}
 	options := domainscan.Options{
-		Layer: 1,
-
+		Layer:              0,
+		SubnextData:        config.Worker.Domainscan.SubnextData,
 		ProviderConfig:     config.Worker.Domainscan.ProviderFile,  //加载subfinder配置文件
 		SubdomainData:      config.Worker.Domainscan.SubdomainData, //加载子域名字典
 		SubdomainDataSmall: config.Worker.Domainscan.SubdomainDataSmall,

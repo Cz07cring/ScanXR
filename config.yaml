@@ -2,3 +2,4 @@ domainscan:
   provider-file: C:\\Users\\czhac\\.config\\subfinder\\provider-config.yaml
   subdomain-file: G:\gocode\src\ScanXR\resource\domainscan\subdomain.txt
   subdomainsmall-file: G:\gocode\src\ScanXR\resource\domainscan\subdomain_sm.txt
+  subnext-file: G:\gocode\src\ScanXR\resource/domainscan/subnext.txt

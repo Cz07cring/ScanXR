@@ -111,30 +111,23 @@ func (r *Runner) RunEnumeration(domain string) (results []*Result) {
 		isWildcard = true
 		gologger.Info().Msgf("存在泛解析: %v", domain)
 	} else {
-		// 生产新域名
+		// 根据域名组合新字典添加到domainlist中
 		domainslist := dnsgen.Dnsgen(domain, r.options.SubdomainDataSmall)
+		for _, s := range domainslist {
+			domains = append(domains, s+"."+domain)
+		}
+		gologger.Info().Msgf("dnsgen字典装载完成..")
 		for _, sub := range r.options.SubdomainData {
-
 			domains = append(domains, sub+"."+domain)
-
-			for _, s := range domainslist {
-				domains = append(domains, s+"."+domain)
-			}
-			//fmt.Println("xxxxxxxxxxxxxxxxxxxxx")
-			//fmt.Println("xxxxxxxxxxxxxxxxxxxxx")
-			//fmt.Println(domains)
-
 		}
 		domains = utils.RemoveDuplicate(domains)
 		if r.options.Layer > 1 {
+			gologger.Info().Msgf("开始第二层子域名生产: %v", domain)
 			domainss := domains
 			for _, sub2 := range r.options.SubnextData {
 				for _, d := range domainss {
 					domains = append(domains, sub2+"."+d)
-					domainslist := dnsgen.Dnsgen(domain, r.options.SubdomainData)
-					for _, s := range domainslist {
-						domains = append(domains, s+"."+domain)
-					}
+
 				}
 			}
 		}
