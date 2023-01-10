@@ -10,6 +10,7 @@ import (
 	"github.com/projectdiscovery/gologger"
 )
 
+//Options 配置文件
 type Options struct {
 	Layer          int
 	ProviderConfig string
@@ -18,16 +19,22 @@ type Options struct {
 	CdnCnameData   []string
 	SubnextData    []string
 }
+
+//返回结果
 type Result struct {
 	Domain string
 	Ip     string
 	Cdn    bool
 }
+
+//加载doaminscan配置文件
 type Runner struct {
 	options *Options
 }
 
+// 创建一个新的newrunner 实例
 func NewRunner(options *Options) (*Runner, error) {
+
 	return &Runner{
 		options: options,
 	}, nil
@@ -38,10 +45,13 @@ func (r *Runner) Run(domains []string) (results []*Result) {
 	}
 	return
 }
+
+//domainscan run扫描主函数
 func (r *Runner) RunEnumeration(domain string) (results []*Result) {
-	gologger.Info().Msgf("开始子域名扫描: %v", domain)
+
 	// 被动收集,subfinder
 	gologger.Info().Msgf("被动收集...")
+	//调用subfinder的run函数
 	domains, err := Subfinder.EnumerateSubdomains([]string{domain}, r.options.ProviderConfig)
 	if err != nil {
 		fmt.Println(err)
@@ -56,8 +66,7 @@ func (r *Runner) RunEnumeration(domain string) (results []*Result) {
 	} else {
 		for _, sub := range r.options.SubdomainData {
 			domains = append(domains, sub+"."+domain)
-			fmt.Println("xxxxxxxxxxxxxxxxxxxxxxxx\n")
-			fmt.Println(sub + "." + domain)
+
 		}
 		domains = utils.RemoveDuplicate(domains)
 		if r.options.Layer > 1 {
@@ -70,13 +79,10 @@ func (r *Runner) RunEnumeration(domain string) (results []*Result) {
 		}
 	}
 	gologger.Info().Msgf("开始DNS解析: %v", len(domains))
-	//	domains = append(domains, domain)
-	//gologger.Info().Msgf("开始DNS解析: %v", len(domains))
 	result, err := ksubdomain.Run(domains, "500000k")
 	gologger.Info().Msgf("ksubdomain结果: %v", len(result))
 	if isWildcard {
 		for _, r2 := range result {
-			//fmt.Println(r2)
 			tmpRes := Result{
 				Domain: r2.Host,
 				Ip:     r2.IP,
