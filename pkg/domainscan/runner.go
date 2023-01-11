@@ -1,7 +1,7 @@
 package domainscan
 
 import (
-	"github.com/Cz07cring/ScanXR/internal/utils"
+	"ScanXR/internal/utils"
 	"github.com/Cz07cring/ScanXR/pkg/domainscan/dnsgen"
 	ksubdomain "github.com/Cz07cring/ScanXR/pkg/domainscan/ksudomain"
 	"github.com/Cz07cring/ScanXR/pkg/domainscan/subfinder"
@@ -11,7 +11,7 @@ import (
 	"github.com/projectdiscovery/gologger"
 )
 
-//Options 配置文件
+// Options 配置文件
 type Options struct {
 	Layer              int
 	ProviderConfig     string
@@ -22,14 +22,14 @@ type Options struct {
 	SubnextData        []string
 }
 
-//返回结果
+// 返回结果
 type Result struct {
 	Domain string
 	Ip     string
 	Cdn    bool
 }
 
-//加载doaminscan配置文件
+// 加载doaminscan配置文件
 type Runner struct {
 	options *Options
 }
@@ -42,7 +42,7 @@ func NewRunner(options *Options) (*Runner, error) {
 	}, nil
 }
 
-//扫描域列表和域传送并且返回result结果
+// 扫描域列表和域传送并且返回result结果
 func (r *Runner) Run(domains []string) (results []*Result) {
 	for _, domain := range domains {
 		gologger.Info().Msgf("开始域传送扫描 %s", domain)
@@ -88,7 +88,7 @@ func (r *Runner) Run(domains []string) (results []*Result) {
 	return
 }
 
-//domainscan run扫描主函数
+// domainscan run扫描主函数
 func (r *Runner) RunEnumeration(domain string) (results []*Result) {
 	gologger.Info().Msgf("开始子域名扫描: %v", domain)
 
@@ -104,12 +104,12 @@ func (r *Runner) RunEnumeration(domain string) (results []*Result) {
 	domains = append(domains, domain)
 	var isWildcard bool
 	//泛解析check
-	//if CheckWildcard(domain) {
-	//	isWildcard = true
-	//	gologger.Info().Msgf("存在泛解析: %v", domain)
-	if false {
+	if CheckWildcard(domain) {
 		isWildcard = true
 		gologger.Info().Msgf("存在泛解析: %v", domain)
+		//if false {
+		//	isWildcard = true
+		//	gologger.Info().Msgf("存在泛解析: %v", domain)
 	} else {
 		// 根据域名组合新字典添加到domainlist中
 		domainslist := dnsgen.Dnsgen(domain, r.options.SubdomainDataSmall)
@@ -142,6 +142,16 @@ func (r *Runner) RunEnumeration(domain string) (results []*Result) {
 				Ip:     r2.IP,
 				Cdn:    r.CheckCDN(r2.IP),
 			}
+			results = append(results, &tmpRes)
+			gologger.Silent().Msgf(fmt.Sprintf("%v => %v => %v", tmpRes.Domain, tmpRes.Ip, tmpRes.Cdn))
+		}
+	} else {
+		for _, res := range result {
+			tmpRes := Result{
+				Domain: res.Host,
+				Ip:     res.IP,
+			}
+			tmpRes.Cdn = r.CheckCDN(res.IP)
 			results = append(results, &tmpRes)
 			gologger.Silent().Msgf(fmt.Sprintf("%v => %v => %v", tmpRes.Domain, tmpRes.Ip, tmpRes.Cdn))
 		}

@@ -11,7 +11,7 @@ var (
 
 func main() {
 	var domain = []string{
-		"projectdiscovery.io",
+		"2100w.cn",
 	}
 	err := core.Domainscan_start(domain)
 	if err != nil {

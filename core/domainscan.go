@@ -1,14 +1,14 @@
 package core
 
 import (
+	"ScanXR/internal/utils"
 	"fmt"
 	"github.com/Cz07cring/ScanXR/config"
-	"github.com/Cz07cring/ScanXR/internal/utils"
 	"github.com/Cz07cring/ScanXR/pkg/domainscan"
 	"github.com/projectdiscovery/gologger"
 )
 
-//扫描domain
+// 扫描domain->初始化domainscan->加载options->扫描->返回结果
 func Domainscan_start(domain []string) error {
 	var err error
 	if config.Worker.Domainscan.SubdomainData, err = utils.ReadLines(config.Worker.Domainscan.SubdomainFile); err != nil {
